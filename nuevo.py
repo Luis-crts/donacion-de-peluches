@@ -1,29 +1,31 @@
-from flask import render_template, request, flash, redirect, url_for, session
+from flask import render_template, request, redirect, flash, url_for, session
 from config import conectar_bd
 
+# Verificar que el nombre del peluche sea único
 def manejar_nuevo():
-    # Verificar si el usuario está logueado
-    if 'user_id' not in session:
-        flash('Debes iniciar sesión para acceder a esta página.', 'error')
-        return redirect(url_for('index'))
-
     if request.method == 'POST':
-        nombre = request.form['nombre']
+        nombre = request.form['nombre'].strip().lower()
         descripcion = request.form['descripcion']
-        dueno_id = session['user_id']  # Obtiene el ID del usuario logueado
-
-        if not nombre or not descripcion:
-            flash('Todos los campos son obligatorios.', 'error')
-            return render_template('nuevo.html')
+        dueno_id = session.get('usuario_id')
 
         connection = conectar_bd()
         try:
             with connection.cursor() as cursor:
-                # Insertar nuevo peluche en la base de datos
-                sql = "INSERT INTO peluches (nombre, descripcion, dueno_id) VALUES (%s, %s, %s)"
-                cursor.execute(sql, (nombre, descripcion, dueno_id))
+                # Revisar si ya existe un peluche con el mismo nombre
+                cursor.execute("SELECT * FROM peluches WHERE LOWER(nombre) = %s", (nombre,))
+                peluche_existente = cursor.fetchone()
+                if peluche_existente:
+                    flash('Ya existe un peluche con ese nombre. Por favor elige otro.', 'error')
+                    return render_template('nuevo.html', nombre=nombre, descripcion=descripcion)
+
+                # Insertar el nuevo peluche en la base de datos
+                cursor.execute("""
+                    INSERT INTO peluches (nombre, descripcion, dueno_id)
+                    VALUES (%s, %s, %s)
+                """, (nombre, descripcion, dueno_id))
                 connection.commit()
-                flash('Peluche donado exitosamente.', 'success')
+
+                flash('Peluche registrado exitosamente.', 'success')
                 return redirect(url_for('dashboard'))
         finally:
             connection.close()
