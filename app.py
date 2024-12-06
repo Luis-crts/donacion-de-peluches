@@ -1,41 +1,22 @@
-from flask import Flask, render_template, request, redirect, url_for
-from config import conectar_bd
+from flask import Flask, render_template, redirect, url_for
+from registro import manejar_registro
+from login import manejar_login  # En caso de que tengas otra funcionalidad para login
 
 app = Flask(__name__)
+app.secret_key = 'tu_secreto'  # Necesario para flash
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/dashboard')
-def dashboard():
-    connection = conectar_bd()
-    try:
-        with connection.cursor() as cursor:
-            # Seleccionar todos los peluches
-            sql = "SELECT * FROM peluches"
-            cursor.execute(sql)
-            peluches = cursor.fetchall()
-        return render_template('dashboard.html', nombre_usuario='Usuario', peluches=peluches)
-    finally:
-        connection.close()
+@app.route('/register', methods=['POST'])
+def register():
+    return manejar_registro()
 
-@app.route('/nuevo', methods=['GET', 'POST'])
-def nuevo():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        descripcion = request.form['descripcion']
-        connection = conectar_bd()
-        try:
-            with connection.cursor() as cursor:
-                # Insertar un nuevo peluche
-                sql = "INSERT INTO peluches (nombre, descripcion) VALUES (%s, %s)"
-                cursor.execute(sql, (nombre, descripcion))
-                connection.commit()
-        finally:
-            connection.close()
-        return redirect(url_for('dashboard'))
-    return render_template('nuevo.html')
+@app.route('/login', methods=['POST'])
+def login():
+    return manejar_login()  # Esto debería estar en un archivo llamado login.py
 
 if __name__ == '__main__':
     app.run(debug=True)
+

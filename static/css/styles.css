@@ -64,3 +64,24 @@ body {
     text-align: right;
 }
 
+.messages {
+    width: 80%;
+    margin: 1rem auto;
+    text-align: center;
+}
+
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}

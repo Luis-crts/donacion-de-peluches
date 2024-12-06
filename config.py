@@ -1,6 +1,5 @@
 import pymysql
 
-# Configuración de la base de datos
 db_config = {
     'host': 'localhost',
     'user': 'root',
