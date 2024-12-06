@@ -34,17 +34,18 @@
                     <td>{{ peluche['descripcion'] }}</td>
                     <td>{{ peluche['donador'] }}</td>
                     <td>
+                        <button onclick="location.href='{{ url_for('ver', id=peluche['id']) }}'">Ver</button>
                         {% if peluche['adoptado'] == 0 %}
-                        <button>Ver</button>
                         <button>Adoptar</button>
                         {% else %}
                         <span class="adoptado">ADOPTADO</span>
                         {% endif %}
-                        <button>Editar</button>
+                        <button onclick="location.href='{{ url_for('editar', id=peluche['id']) }}'">Editar</button>
                         <button>Borrar</button>
                     </td>
                 </tr>
                 {% endfor %}
+                
             </tbody>
         </table>
     </div>

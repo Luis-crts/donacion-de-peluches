@@ -4,6 +4,8 @@ from login import manejar_login
 from nuevo import manejar_nuevo
 from utils import login_required
 from config import conectar_bd
+from editar import manejar_editar
+
 
 app = Flask(__name__)
 app.secret_key = 'tu_secreto'  # Necesario para flash
@@ -51,6 +53,30 @@ def logout():
 @login_required
 def nuevo():
     return manejar_nuevo()
+
+@app.route('/editar/<int:id>', methods=['GET', 'POST'])
+def editar(id):
+    return manejar_editar(id)
+
+@app.route('/ver/<int:id>', methods=['GET'])
+@login_required
+def ver(id):
+    connection = conectar_bd()
+    try:
+        with connection.cursor() as cursor:
+            # Obtener los datos del peluche por su id
+            cursor.execute("SELECT p.*, u.nombre AS dueno FROM peluches p JOIN usuarios u ON p.dueno_id = u.id WHERE p.id = %s", (id,))
+            peluche = cursor.fetchone()
+            if peluche is None:
+                flash('Peluche no encontrado.', 'error')
+                return redirect(url_for('dashboard'))
+    finally:
+        connection.close()
+
+    # Pasar los datos del peluche a la plantilla ver.html
+    return render_template('ver.html', nombre=peluche['nombre'], descripcion=peluche['descripcion'], dueno=peluche['dueno'], visitas=peluche['visitas'], adoptado_por=peluche.get('adoptado_por'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
