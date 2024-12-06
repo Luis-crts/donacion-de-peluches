@@ -22,35 +22,29 @@
             <thead>
                 <tr>
                     <th>Nombre del Peluche</th>
+                    <th>Descripción</th>
                     <th>Donador</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <!-- Aquí se repetirá dinámicamente cada peluche con Flask -->
+                {% for peluche in peluches %}
                 <tr>
-                    <td>Oso de Peluche</td>
-                    <td>Juan</td>
+                    <td>{{ peluche['nombre'] }}</td>
+                    <td>{{ peluche['descripcion'] }}</td>
+                    <td>{{ peluche['donador'] }}</td>
                     <td>
+                        {% if peluche['adoptado'] == 0 %}
                         <button>Ver</button>
                         <button>Adoptar</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Gatito Peluche</td>
-                    <td>Andrea</td>
-                    <td>
+                        {% else %}
                         <span class="adoptado">ADOPTADO</span>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Pikachu</td>
-                    <td>Miyagi</td>
-                    <td>
+                        {% endif %}
                         <button>Editar</button>
                         <button>Borrar</button>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
