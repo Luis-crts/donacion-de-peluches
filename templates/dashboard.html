@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Donación de Peluches</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+    <div class="bienvenida">
+        <h1>Bienvenid@, {{ nombre_usuario }}</h1>
+    </div>
+
+    <div class="acciones">
+        <button onclick="location.href='/donar'">Donar Peluche</button>
+        <button onclick="location.href='/logout'">Cerrar Sesión</button>
+    </div>
+
+    <div class="peluches">
+        <h2>Todos los Peluches</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Peluche</th>
+                    <th>Donador</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se repetirá dinámicamente cada peluche con Flask -->
+                <tr>
+                    <td>Oso de Peluche</td>
+                    <td>Juan</td>
+                    <td>
+                        <button>Ver</button>
+                        <button>Adoptar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gatito Peluche</td>
+                    <td>Andrea</td>
+                    <td>
+                        <span class="adoptado">ADOPTADO</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pikachu</td>
+                    <td>Miyagi</td>
+                    <td>
+                        <button>Editar</button>
+                        <button>Borrar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

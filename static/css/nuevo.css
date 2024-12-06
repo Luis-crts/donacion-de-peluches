@@ -1,0 +1,80 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+}
+
+.nueva-donacion {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.nueva-donacion h1 {
+    margin-bottom: 0.5rem;
+}
+
+.nueva-donacion .error {
+    color: red;
+    font-size: 0.9rem;
+}
+
+.acciones {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.acciones button {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.acciones button:hover {
+    background-color: #0056b3;
+}
+
+.formulario {
+    width: 50%;
+    max-width: 600px;
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.formulario label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.formulario input, .formulario textarea {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.formulario button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #28a745;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.formulario button:hover {
+    background-color: #218838;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nueva Donación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nuevo.css') }}">
+</head>
+<body>
+    <div class="nueva-donacion">
+        <h1>Nueva Donación</h1>
+        <p class="error">Descripción no puede estar vacía</p>
+    </div>
+
+    <div class="acciones">
+        <button onclick="location.href='/'">Inicio</button>
+        <button onclick="location.href='/logout'">Cerrar Sesión</button>
+    </div>
+
+    <div class="formulario">
+        <form method="POST" action="/nuevo">
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="descripcion">Descripción:</label>
+            <textarea id="descripcion" name="descripcion" required></textarea>
+
+            <button type="submit">Guardar</button>
+        </form>
+    </div>
+</body>
+</html>
+

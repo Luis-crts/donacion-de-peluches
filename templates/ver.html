@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Donación</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ver.css') }}">
+</head>
+<body>
+    <div class="acciones">
+        <button onclick="location.href='/'">Inicio</button>
+        <button onclick="location.href='/logout'">Cerrar Sesión</button>
+    </div>
+
+    <div class="informacion-peluche">
+        <h1>{{ nombre }}</h1>
+        <p><strong>Dueño:</strong> {{ dueno }}</p>
+        <p><strong>Descripción:</strong> {{ descripcion }}</p>
+        
+        {% if adoptado_por %}
+        <p><strong>Adoptado por:</strong> {{ adoptado_por }}</p>
+        {% endif %}
+        
+        <p><strong>Visitas:</strong> {{ visitas }}</p>
+    </div>
+</body>
+</html>
