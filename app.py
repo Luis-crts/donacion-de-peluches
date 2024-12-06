@@ -5,6 +5,7 @@ from nuevo import manejar_nuevo
 from utils import login_required
 from config import conectar_bd
 from editar import manejar_editar
+from ver import manejar_ver  # Importar la nueva función
 
 
 app = Flask(__name__)
@@ -16,9 +17,9 @@ def dashboard():
     connection = conectar_bd()
     try:
         with connection.cursor() as cursor:
-            # Utilizamos JOIN para obtener el nombre del usuario que donó cada peluche
+            # Obtener la información completa del peluche, incluyendo adoptado y adoptado_por
             cursor.execute("""
-                SELECT p.id, p.nombre, p.descripcion, u.nombre AS donador
+                SELECT p.id, p.nombre, p.descripcion, u.nombre AS donador, p.adoptado, p.adoptado_por
                 FROM peluches p
                 JOIN usuarios u ON p.dueno_id = u.id
             """)
@@ -28,7 +29,6 @@ def dashboard():
 
     # Pasar los datos de los peluches a la plantilla dashboard.html
     return render_template('dashboard.html', peluches=peluches, nombre_usuario=session.get('nombre_usuario'))
-
 
 
 @app.route('/')
@@ -61,21 +61,38 @@ def editar(id):
 @app.route('/ver/<int:id>', methods=['GET'])
 @login_required
 def ver(id):
+    peluche = manejar_ver(id)  # Utiliza la nueva función para obtener y actualizar los datos
+    if peluche is None:
+        return redirect(url_for('dashboard'))
+
+    # Pasar los datos del peluche a la plantilla ver.html
+    return render_template('ver.html', nombre=peluche['nombre'], descripcion=peluche['descripcion'], 
+                           dueno=peluche['dueno'], visitas=peluche['visitas'], 
+                           adoptado_por=peluche.get('adoptado_por', 'Nadie'))
+
+@app.route('/adoptar/<int:id>', methods=['POST'])
+@login_required
+def adoptar(id):
+    usuario_id = session.get('usuario_id')
+
     connection = conectar_bd()
     try:
         with connection.cursor() as cursor:
-            # Obtener los datos del peluche por su id
-            cursor.execute("SELECT p.*, u.nombre AS dueno FROM peluches p JOIN usuarios u ON p.dueno_id = u.id WHERE p.id = %s", (id,))
+            # Verificar si el peluche ya fue adoptado
+            cursor.execute("SELECT adoptado FROM peluches WHERE id = %s", (id,))
             peluche = cursor.fetchone()
-            if peluche is None:
-                flash('Peluche no encontrado.', 'error')
+            if peluche is None or peluche['adoptado'] == 1:
+                flash('El peluche ya fue adoptado.', 'error')
                 return redirect(url_for('dashboard'))
+
+            # Actualizar el estado de adopción del peluche
+            cursor.execute("UPDATE peluches SET adoptado = 1, adoptado_por = %s WHERE id = %s", (usuario_id, id))
+            connection.commit()
+            flash('Peluche adoptado exitosamente.', 'success')
     finally:
         connection.close()
 
-    # Pasar los datos del peluche a la plantilla ver.html
-    return render_template('ver.html', nombre=peluche['nombre'], descripcion=peluche['descripcion'], dueno=peluche['dueno'], visitas=peluche['visitas'], adoptado_por=peluche.get('adoptado_por'))
-
+    return redirect(url_for('dashboard'))
 
 
 if __name__ == '__main__':

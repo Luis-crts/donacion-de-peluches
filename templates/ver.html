@@ -8,7 +8,7 @@
 </head>
 <body>
     <div class="acciones">
-        <button onclick="location.href='/'">Inicio</button>
+        <button onclick="location.href='{{ url_for('dashboard') }}'">Inicio</button>
         <button onclick="location.href='/logout'">Cerrar Sesión</button>
     </div>
 
@@ -16,11 +16,9 @@
         <h1>{{ nombre }}</h1>
         <p><strong>Dueño:</strong> {{ dueno }}</p>
         <p><strong>Descripción:</strong> {{ descripcion }}</p>
-        
-        {% if adoptado_por %}
-        <p><strong>Adoptado por:</strong> {{ adoptado_por }}</p>
-        {% endif %}
-        
+    
+        <p><strong>Adoptado por:</strong> {% if adoptado_por %}{{ adoptado_por }}{% else %}Nadie{% endif %}</p>
+    
         <p><strong>Visitas:</strong> {{ visitas }}</p>
     </div>
 </body>
